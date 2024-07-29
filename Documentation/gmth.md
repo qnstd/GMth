@@ -1,6 +1,8 @@
 # GMth Documentation
 
-> This is a custom math library for Unity3D.
+![](images/label.png)
+
+This is a custom math library for Unity3D.
 
 
 ## Directory Structure ##
