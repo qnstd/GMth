@@ -1,0 +1,13 @@
+{
+  "name": "com.cngraphi.gmth",
+  "author": "Graphi",
+  "version": "1.0.0",
+  "displayName": "GMth",
+  "unity": "2022.3",
+  "description": "Custom math library for Unity3D.\nIncludes vector, matrix, quaternion and other 3D related calculations.",
+  "keywords": [
+    "graphi",
+    "gmth",
+    "unity"
+  ]
+}
