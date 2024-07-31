@@ -1,5 +1,5 @@
 # GMth 
 
-> Custom math library for Unity3D.
+> Unity3D 数学包
  
-> Includes vector, matrix, quaternion and other 3D related calculations.
+> 包含向量、矩阵、四元数、平面、视椎体等相关的 3D 计算。

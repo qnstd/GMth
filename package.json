@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "displayName": "GMth",
   "unity": "2022.3",
-  "description": "Custom math library for Unity3D.\nIncludes vector, matrix, quaternion and other 3D related calculations.",
+  "description": "Unity3D \u6570\u5b66\u5305\r\n\r\u5305\u542b\u5411\u91cf\u3001\u77e9\u9635\u3001\u56db\u5143\u6570\u3001\u5e73\u9762\u3001\u89c6\u690e\u4f53\u7b49\u76f8\u5173\u7684 3D \u8ba1\u7b97\u3002",
   "keywords": [
     "graphi",
     "gmth",

@@ -1,34 +1,21 @@
-# GMth Documentation
+# GMth
 
 ![](images/label.png)
 
-This is a custom math library for Unity3D.
+Unity3D 数学包
 
 
-## Directory Structure ##
-> Documentation
->> images
+## 目录结构 ##
+> Documentation 文档
 
->> gmth.md
+> Editor 编辑工具
 
-> Editor
->> cngraphi.gmth.editor.asmdef
+> Runtime 运行时脚本
 
-> Runtime
->> cngraphi.gmth.asmdef
+> CHANGELOG.md 日志
 
->> ***FrustumUtils.cs***
+> LICENSE.md 许可
 
->> ***MthUtils.cs***
+> package.json 配置
 
->> ***PlaneUtils.cs***
-
->> ***VectorUtils.cs***
-
-> CHANGELOG.md
-
-> LICENSE.md
-
-> package.json
-
-> README.md
+> README.md 说明
