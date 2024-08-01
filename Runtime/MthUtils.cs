@@ -9,7 +9,6 @@ namespace cngraphi.gmth
     /// </summary>
     public class MthUtils
     {
-
         /// <summary>
         /// PI
         /// </summary>
