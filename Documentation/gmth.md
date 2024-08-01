@@ -1,5 +1,3 @@
-# GMth
-
 ![](images/label.png)
 
 Unity3D 数学包
