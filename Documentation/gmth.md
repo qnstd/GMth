@@ -1,7 +1,5 @@
 ![](images/label.png)
 
-Unity3D 数学包
-
 
 ## 目录结构 ##
 > Documentation 文档
