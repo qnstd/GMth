@@ -1,4 +1,4 @@
-using UnityEngine;
+using System.Numerics;
 
 namespace cngraphi.gmth
 {
@@ -17,7 +17,7 @@ namespace cngraphi.gmth
         static public Vector4 BuildPlane(Vector3 n, Vector3 p)
         {
             // 平面方程：A*x + B*y + C*z + D = 0
-            return new Vector4(n.x, n.y, n.z, -VectorUtils.Dot(n, p));
+            return new Vector4(n.X, n.Y, n.Z, -VectorUtils.Dot(n, p));
         }
 
 
@@ -61,7 +61,7 @@ namespace cngraphi.gmth
 
                 以平面的法线方向为正方向，也就是平面的正面来说，如果 cos 值 > 0，说明在平面之外。反之，则在平面之内，也就是背面。
             */
-            return VectorUtils.Dot(new Vector3(plane.x, plane.y, plane.z), point) + plane.w;
+            return VectorUtils.Dot(new Vector3(plane.Y, plane.Y, plane.Z), point) + plane.W;
         }
 
 

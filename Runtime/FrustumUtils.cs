@@ -1,4 +1,5 @@
-using UnityEngine;
+using System;
+using System.Numerics;
 
 namespace cngraphi.gmth
 {
@@ -11,20 +12,22 @@ namespace cngraphi.gmth
         /// <summary>
         /// 获取摄像机视椎远裁面的 4 个端点
         /// </summary>
-        /// <param name="cam">摄像机</param>
+        /// <param name="upDir">上方向</param>
+        /// <param name="rightDir">右方向</param>
+        /// <param name="position">位置</param>
+        /// <param name="forward">朝向</param>
+        /// <param name="far">远裁剪面</param>
+        /// <param name="fov">视野（角度）</param>
+        /// <param name="aspect">宽高比</param>
         /// <returns>端点数组。顺序依次是：左下、右下、左上、右上</returns>
-        static public Vector3[] GetCameraFarPlane4Points(Camera cam)
+        static public Vector3[] GetCameraFarPlane4Points(Vector3 upDir, Vector3 rightDir, Vector3 position, Vector3 forward, float far, float fov, float aspect)
         {
-            if (cam == null || cam.transform == null) { return null; }
-            Transform camTransform = cam.transform;
+            float upDistance = far * MathF.Tan((float)(MthUtils.Deg2Rad * fov * 0.5f));
+            float rightDistance = upDistance * aspect;
 
-            float farPlaneDistance = cam.farClipPlane;
-            float upDistance = farPlaneDistance * Mathf.Tan(Mathf.Deg2Rad * cam.fieldOfView * 0.5f);
-            float rightDistance = upDistance * cam.aspect;
-
-            Vector3 up = camTransform.up * upDistance;
-            Vector3 right = camTransform.right * rightDistance;
-            Vector3 farPlaneCenterPoint = camTransform.position + camTransform.forward * farPlaneDistance;
+            Vector3 up = upDir * upDistance;
+            Vector3 right = rightDir * rightDistance;
+            Vector3 farPlaneCenterPoint = position + forward * far;
 
             return new Vector3[4]
             {
@@ -39,20 +42,22 @@ namespace cngraphi.gmth
         /// <summary>
         /// 获取摄像机视椎近裁面的 4 个端点
         /// </summary>
-        /// <param name="cam">摄像机</param>
+        /// <param name="upDir">上方向</param>
+        /// <param name="rightDir">右方向</param>
+        /// <param name="position">位置</param>
+        /// <param name="forward">朝向</param>
+        /// <param name="far">近裁剪面</param>
+        /// <param name="fov">视野（角度）</param>
+        /// <param name="aspect">宽高比</param>
         /// <returns>端点数组。顺序依次是：左下、右下、左上、右上</returns>
-        static public Vector3[] GetCameraNearPlane4Points(Camera cam)
+        static public Vector3[] GetCameraNearPlane4Points(Vector3 upDir, Vector3 rightDir, Vector3 position, Vector3 forward, float near, float fov, float aspect)
         {
-            if (cam == null || cam.transform == null) { return null; }
-            Transform camTransform = cam.transform;
+            float upDistance = near * MathF.Tan((float)(MthUtils.Deg2Rad * fov * 0.5f));
+            float rightDistance = upDistance * aspect;
 
-            float nearPlaneDistance = cam.nearClipPlane;
-            float upDistance = nearPlaneDistance * Mathf.Tan(Mathf.Deg2Rad * cam.fieldOfView * 0.5f);
-            float rightDistance = upDistance * cam.aspect;
-
-            Vector3 up = camTransform.up * upDistance;
-            Vector3 right = camTransform.right * rightDistance;
-            Vector3 nearPlaneCenterPoint = camTransform.position + camTransform.forward * nearPlaneDistance;
+            Vector3 up = upDir * upDistance;
+            Vector3 right = rightDir * rightDistance;
+            Vector3 nearPlaneCenterPoint = position + forward * near;
 
             return new Vector3[4]
             {
@@ -68,17 +73,20 @@ namespace cngraphi.gmth
         /// <summary>
         /// 获取摄像机视椎体的 6 个平面
         /// </summary>
-        /// <param name="cam">摄像机</param>
+        /// <param name="upDir">上方向</param>
+        /// <param name="rightDir">右方向</param>
+        /// <param name="position">摄像机位置</param>
+        /// <param name="forward">摄像机朝向</param>
+        /// <param name="nearClipPlane">近裁剪面</param>
+        /// <param name="farClipPlane">远裁剪面</param>
+        /// <param name="fov">视野（角度）</param>
+        /// <param name="aspect">宽高比</param>
         /// <returns>平面数组。顺序依次是：左、右、下、上、近裁、远裁</returns>
-        static public Vector4[] GetCameraFrustumPlanes(Camera cam)
+        static public Vector4[] GetCameraFrustumPlanes(Vector3 upDir, Vector3 rightDir, Vector3 position, Vector3 forward, float near, float far, float fov, float aspect)
         {
-            if (cam == null || cam.transform == null) { return null; }
-
-
-            Transform t = cam.transform;
-            Vector3 camPos = t.position;
-            Vector3[] points = GetCameraFarPlane4Points(cam);
-            Vector3 forward = t.forward;
+            Vector3 camPos = position;
+            Vector3[] points = GetCameraFarPlane4Points(upDir, rightDir, position, forward, far, fov, aspect);
+            Vector3 camForward = forward;
 
 
             return new Vector4[6]
@@ -89,8 +97,8 @@ namespace cngraphi.gmth
                 PlaneUtils.BuildPlane(camPos, points[1], points[0]), // 下
                 PlaneUtils.BuildPlane(camPos, points[2], points[3]), // 上
         #endregion
-                PlaneUtils.BuildPlane(-forward, camPos + forward * cam.nearClipPlane), // 近裁面
-                PlaneUtils.BuildPlane(forward, camPos + forward * cam.farClipPlane)  // 远裁面
+                PlaneUtils.BuildPlane(-camForward, camPos + camForward * near), // 近裁面
+                PlaneUtils.BuildPlane(camForward, camPos + camForward * far)  // 远裁面
             };
         }
 
@@ -122,25 +130,6 @@ namespace cngraphi.gmth
                 }
             }
             return true;
-        }
-
-
-
-        /// <summary>
-        /// 包围盒是否在视椎内
-        /// </summary>
-        /// <param name="planes">摄像机</param>
-        /// <param name="box">包围盒的顶点</param>
-        /// <returns>true：在；false：不在</returns>
-        static public bool BoxInFrustum(Camera cam, Vector3[] box)
-        {
-            if (cam == null) { return false; }
-
-            // 视椎体6面
-            Vector4[] planes = GetCameraFrustumPlanes(cam);
-            if (planes == null || planes.Length == 0) { return false; }
-
-            return BoxInFrustum(planes, box);
         }
     }
 }

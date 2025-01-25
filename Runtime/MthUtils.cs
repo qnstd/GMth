@@ -1,14 +1,78 @@
 using System;
+using System.Numerics;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace cngraphi.gmth
 {
     /// <summary>
-    /// 数学计算
+    /// 数学工具包
     /// <para>作者：强辰</para>
     /// </summary>
     public class MthUtils
     {
+        #region 数据类型 强制转换
+        // 创建int，float类型的强制转换
+        [StructLayout(LayoutKind.Explicit)]
+        internal struct IntFloatUnion
+        {
+            [FieldOffset(0)]// 偏移位置
+            public int intValue;
+            [FieldOffset(0)]
+            public float floatValue;
+        }
+        /// <summary>
+        /// 强制将 float 转 int 
+        /// </summary>
+        /// <param name="x"></param>
+        /// <returns></returns>
+        static public int AS_int(float x)
+        {
+            IntFloatUnion u;
+            u.intValue = 0;
+            u.floatValue = x;
+            return u.intValue;
+        }
+        /// <summary>
+        /// 强制将 int 转 float
+        /// </summary>
+        /// <param name="x"></param>
+        /// <returns></returns>
+        static public float AS_float(int x)
+        {
+            IntFloatUnion u;
+            u.floatValue = 0;
+            u.intValue = x;
+            return u.floatValue;
+        }
+        /// <summary>
+        /// 强制将 uint 转 float
+        /// </summary>
+        /// <param name="x"></param>
+        /// <returns></returns>
+        static public float AS_float(uint x) { return AS_float((int)x); }
+        /// <summary>
+        /// 强制将 float 转 uint 
+        /// </summary>
+        /// <param name="x"></param>
+        /// <returns></returns>
+        static public uint AS_uint(float x) { return (uint)AS_int(x); }
+        /// <summary>
+        /// 强制将 Uint4 数据结构转为 Vector4 数据结构
+        /// </summary>
+        /// <param name="u"></param>
+        /// <returns></returns>
+        static public Vector4 AS_float(Uint4 u) { return new Vector4(AS_float(u.x), AS_float(u.y), AS_float(u.z), AS_float(u.w)); }
+        /// <summary>
+        /// 强制将 Vector4 转 Uint4
+        /// </summary>
+        /// <param name="v"></param>
+        /// <returns></returns>
+        static public Uint4 AS_uint(Vector4 v) { return new Uint4(AS_uint(v.X), AS_uint(v.Y), AS_uint(v.Z), AS_uint(v.W)); }
+        #endregion
+
+
+
         /// <summary>
         /// PI
         /// </summary>
@@ -25,6 +89,14 @@ namespace cngraphi.gmth
         /// 弧度转角度
         /// </summary>
         static public double Rad2Deg { get { return 57.29578F; } }
+
+
+        /// <summary>
+        /// float 值的 abs 绝对值转换
+        /// </summary>
+        /// <param name="x"></param>
+        /// <returns></returns>
+        static public float Abs(float x) { return AS_float(AS_uint(x) & 0x7FFFFFFF); }
 
 
         /// <summary>
@@ -130,6 +202,7 @@ namespace cngraphi.gmth
             t = Repeat(t, len * 2);
             return len - Math.Abs(t - len);
         }
+
 
     }
 }
